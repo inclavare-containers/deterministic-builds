@@ -1,0 +1,16 @@
+FROM ubuntu
+
+RUN cp /etc/apt/sources.list /etc/apt/sources.list.backup && sed -i "s/archive.ubuntu.com/mirrors.aliyun.com/g" /etc/apt/sources.list
+RUN apt-get update && apt-get install -y build-essential parallel wget clang libelf1 libelf-dev zlib1g-dev
+COPY . /root/
+
+WORKDIR /root/tests/cases/kernel
+RUN chmod +x init.sh && ./init.sh -s 1 
+
+WORKDIR /root/tests
+RUN chmod +x init.sh && ./init.sh
+
+WORKDIR /root/preload
+RUN ./load_modify.sh
+
+WORKDIR /root
