@@ -1,0 +1,6 @@
+[submodule "bpf/libbpf"]
+	path = bpf/libbpf
+	url = https://github.com/libbpf/libbpf/
+[submodule "bpf/bpftool"]
+	path = bpf/bpftool
+	url = https://github.com/libbpf/bpftool/
