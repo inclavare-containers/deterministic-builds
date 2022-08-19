@@ -19,7 +19,7 @@ INCLUDES := -I$(OUTPUT) -I../libbpf/include/uapi -I$(dir $(VMLINUX))
 CFLAGS := -g -Wall
 ALL_LDFLAGS := $(LDFLAGS) $(EXTRA_LDFLAGS)
 
-APPS = modify_time modify_access
+APPS = modify_time modify_access preload_filter
 
 CARGO ?= $(shell which cargo)
 ifeq ($(strip $(CARGO)),)
