@@ -17,5 +17,5 @@ time_t time(time_t *t)
     if (t) {
         *t = MODIFIED_TIMESTAMP;
     }
-    return 0;
+    return MODIFIED_TIMESTAMP;
 }
