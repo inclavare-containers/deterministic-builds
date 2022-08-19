@@ -15,12 +15,12 @@ if [[ ! (-e ./preload/modify_time.so) ]]; then
     exit 1
 fi
 
-if [[ ! (-e ./bpf/src/modifytime) ]]; then
-    echo "./bpf/src/modifytime not exist, exit"
+if [[ ! (-e ./bpf/src/modify_time) ]]; then
+    echo "./bpf/src/modify_time not exist, exit"
     exit 1
 fi
 
 # export LD_PRELOAD=$PWD/preload/modify_time.so
-./bpf/src/modifytime &
+./bpf/src/modify_time &
 
 set +x

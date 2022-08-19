@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
 /* Copyright (c) 2020 Facebook */
-#ifndef __MODIFYTIME_H
-#define __MODIFYTIME_H
+#ifndef __MODIFY_TIME_H
+#define __MODIFY_TIME_H
 
 #define TASK_COMM_LEN 16
 #define MAX_FILENAME_LEN 127
@@ -16,4 +16,4 @@ struct event {
 	bool exit_event;
 };
 
-#endif /* __MODIFYTIME_H */
+#endif /* __MODIFY_TIME_H */

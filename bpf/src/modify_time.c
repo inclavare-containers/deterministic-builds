@@ -6,23 +6,23 @@
 #include <time.h>
 #include <sys/resource.h>
 #include <bpf/libbpf.h>
-#include "modifytime.h"
-#include "modifytime.skel.h"
+#include "modify_time.h"
+#include "modify_time.skel.h"
 
 static struct env {
 	bool verbose;
 	// long min_duration_ms;
 } env;
 
-const char *argp_program_version = "modifytime 0.0";
+const char *argp_program_version = "modify_time 0.0";
 const char *argp_program_bug_address = "<bpf@vger.kernel.org>";
 const char argp_program_doc[] =
-"BPF modifytime demo application.\n"
+"BPF modify_time demo application.\n"
 "\n"
 "It traces process start and exits and shows associated \n"
 "information (filename, process duration, PID and PPID, etc).\n"
 "\n"
-"USAGE: ./modifytime [-d <min-duration-ms>] [-v]\n";
+"USAGE: ./modify_time [-d <min-duration-ms>] [-v]\n";
 
 static const struct argp_option opts[] = {
 	{ "verbose", 'v', NULL, 0, "Verbose debug output" },
@@ -101,7 +101,7 @@ static int handle_event(void *ctx, void *data, size_t data_sz)
 int main(int argc, char **argv)
 {
 	struct ring_buffer *rb = NULL;
-	struct modifytime_bpf *skel;
+	struct modify_time_bpf *skel;
 	int err;
 
 	/* Parse command line arguments */
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 	signal(SIGTERM, sig_handler);
 
 	/* Load and verify BPF application */
-	skel = modifytime_bpf__open();
+	skel = modify_time_bpf__open();
 	if (!skel) {
 		fprintf(stderr, "Failed to open and load BPF skeleton\n");
 		return 1;
@@ -128,14 +128,14 @@ int main(int argc, char **argv)
 	// skel->rodata->min_duration_ns = env.min_duration_ms * 1000000ULL;
 
 	/* Load & verify BPF programs */
-	err = modifytime_bpf__load(skel);
+	err = modify_time_bpf__load(skel);
 	if (err) {
 		fprintf(stderr, "Failed to load and verify BPF skeleton\n");
 		goto cleanup;
 	}
 
 	/* Attach tracepoints */
-	err = modifytime_bpf__attach(skel);
+	err = modify_time_bpf__attach(skel);
 	if (err) {
 		fprintf(stderr, "Failed to attach BPF skeleton\n");
 		goto cleanup;
@@ -166,7 +166,7 @@ int main(int argc, char **argv)
 cleanup:
 	/* Clean up */
 	ring_buffer__free(rb);
-	modifytime_bpf__destroy(skel);
+	modify_time_bpf__destroy(skel);
 
 	return err < 0 ? -err : 0;
 }
