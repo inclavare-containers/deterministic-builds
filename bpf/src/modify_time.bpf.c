@@ -25,10 +25,7 @@ struct
 
 bool comm_filter(char *comm)
 {
-    if (!(__builtin_memcmp("cc1\0", comm, 4) == 0) 
-    && !(__builtin_memcmp("get\0", comm, 4) == 0)
-    && !(__builtin_memcmp("date", comm, 4) == 0)
-    ) {
+    if (!(__builtin_memcmp("cc1\0", comm, 4) == 0)) {
         return 0;
     }
     
@@ -72,8 +69,6 @@ int handle_exit_gettimeofday(struct trace_event_raw_sys_exit *ctx)
         return 0;
     }
 
-    bpf_printk("BPF triggered from TID %lld, COMM %s.", tid, comm);
-
     long unsigned int * time_pp  = bpf_map_lookup_elem(&time_p_map, &tid);
     if (time_pp == NULL)
     {
@@ -92,8 +87,8 @@ int handle_exit_gettimeofday(struct trace_event_raw_sys_exit *ctx)
     replace_time.tv_sec = MODIFIED_TIMESTAMP;
     replace_time.tv_usec = 0;
 
-    bpf_printk("** sys_exit_gettimeofday ** OVERWRITING struct timeval at \
-    %p (%d, %d) to (%d, %d)", 
+    bpf_printk("[sys_exit_gettimeofday] OVERWRITING struct timeval at \
+    %p from (%d, %d) to (%d, %d)", 
     time_p,
     retval.tv_sec,
     retval.tv_usec,
@@ -101,7 +96,7 @@ int handle_exit_gettimeofday(struct trace_event_raw_sys_exit *ctx)
     replace_time.tv_usec);
 
     success = bpf_probe_write_user((char *) time_p, (char *) &replace_time, sizeof(struct __kernel_old_timeval));
-    bpf_printk("** RESULT %d", success);
+    bpf_printk("[sys_exit_gettimeofday] RESULT %d", success);
 
     return 0;
 }
@@ -144,8 +139,6 @@ int handle_exit_clock_gettime(struct trace_event_raw_sys_exit *ctx)
         return 0;
     }
 
-    bpf_printk("BPF triggered from TID %lld, COMM %s.", tid, comm);
-
     long unsigned int * time_pp  = bpf_map_lookup_elem(&time_p_map, &tid);
     if (time_pp == NULL)
     {
@@ -165,8 +158,8 @@ int handle_exit_clock_gettime(struct trace_event_raw_sys_exit *ctx)
     replace_time.tv_sec = MODIFIED_TIMESTAMP;
     replace_time.tv_nsec = 0;
 
-    bpf_printk("** sys_exit_clock_gettime ** OVERWRITING struct timespec64 at \
-    %p (%d, %d) to (%d, %d)", 
+    bpf_printk("[sys_exit_clock_gettime] OVERWRITING struct timespec64 at \
+    %p from (%d, %d) to (%d, %d)", 
     time_p, 
     retval.tv_sec,
     retval.tv_nsec,
@@ -174,7 +167,7 @@ int handle_exit_clock_gettime(struct trace_event_raw_sys_exit *ctx)
     replace_time.tv_nsec);
 
     success = bpf_probe_write_user((char *) time_p, (char *) &replace_time, sizeof(struct timespec64));
-    bpf_printk("** RESULT %d", success);
+    bpf_printk("[sys_exit_clock_gettime] RESULT %d", success);
 
     return 0;
 }
