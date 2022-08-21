@@ -5,15 +5,17 @@ if [[ `whoami` != "root" ]]; then
     exit 1
 fi
 
-EBPF_PROCESS=$(ps aux | grep '[m]odifytime' | awk '{print $2}')
+BPF_Apps=('modify_time' 'modify_file_timestamp' 'preload_filter')
 
-if [[ -z $EBPF_PROCESS ]]; then
-    echo "Process about moditytime is empty"
-    exit 1
-fi
-
-for pid in $EBPF_PROCESS;
-do
-    echo "killing process $pid"
-    kill -2 $pid
-done 
+for app in "${BPF_Apps[@]}"; do
+    echo "Killing $app"
+    processes=$(ps aux | grep ${app} | awk '{print $2}')
+    if [[ -z $processes ]]; then
+        echo "Process about $app is empty"
+        exit 1
+    fi
+    for pid in $processes; do
+        echo "killing process $pid"
+        kill -2 $pid
+    done
+done
