@@ -15,7 +15,7 @@ struct tm _tmbuf;
 time_t time(time_t *t)
 {
     if (t) {
-        *t = MODIFIED_TIMESTAMP;
+        *t = MODIFIED_CURRENT_TIMESTAMP;
     }
-    return MODIFIED_TIMESTAMP;
+    return MODIFIED_CURRENT_TIMESTAMP;
 }

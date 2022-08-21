@@ -96,7 +96,6 @@ int handle_enter_newfstatat(struct trace_event_raw_sys_enter *ctx)
     }
 
     void * stat_p = (void *) ctx->args[2];
-    long int *size_p = stat_p + 48;
 
     struct stat statbuf;
     long success = bpf_probe_read_user(&statbuf, sizeof(struct stat), stat_p);

@@ -15,21 +15,21 @@ struct tm _tmbuf;
 time_t f4ke(time_t *t)
 {
     if (t) {
-        *t = MODIFIED_TIMESTAMP;
+        *t = MODIFIED_CURRENT_TIMESTAMP;
     }
     return 0;
 }
 
 int clock_getf4ke(clockid_t __clock_id, struct timespec *__res)
 {
-    __res->tv_sec = MODIFIED_TIMESTAMP;
+    __res->tv_sec = MODIFIED_CURRENT_TIMESTAMP;
     __res->tv_nsec = 0;
     return 0;
 }
 
 extern int getf4keofday(struct timeval *tv, void *tz)
 {
-    tv->tv_sec = MODIFIED_TIMESTAMP;
+    tv->tv_sec = MODIFIED_CURRENT_TIMESTAMP;
     tv->tv_usec = 0;
     return 0;
 }

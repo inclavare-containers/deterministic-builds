@@ -1,4 +1,4 @@
-all: macros file files date
+all: macros file files date timestamp
 
 macros: macros.c
 	gcc macros.c -o macros_$(shell date +%Y%m%d%H%M%S).out

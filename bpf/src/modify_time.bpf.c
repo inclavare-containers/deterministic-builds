@@ -28,7 +28,6 @@ bool comm_filter(char *comm)
     if (!(__builtin_memcmp("cc1\0", comm, 4) == 0)) {
         return 0;
     }
-    
     return 1;
 }
 
@@ -84,7 +83,7 @@ int handle_exit_gettimeofday(struct trace_event_raw_sys_exit *ctx)
 
     struct __kernel_old_timeval replace_time;
 
-    replace_time.tv_sec = MODIFIED_TIMESTAMP;
+    replace_time.tv_sec = MODIFIED_CURRENT_TIMESTAMP;
     replace_time.tv_usec = 0;
 
     bpf_printk("[sys_exit_gettimeofday] OVERWRITING struct timeval at \
@@ -155,7 +154,7 @@ int handle_exit_clock_gettime(struct trace_event_raw_sys_exit *ctx)
 
     struct timespec64 replace_time;
 
-    replace_time.tv_sec = MODIFIED_TIMESTAMP;
+    replace_time.tv_sec = MODIFIED_CURRENT_TIMESTAMP;
     replace_time.tv_nsec = 0;
 
     bpf_printk("[sys_exit_clock_gettime] OVERWRITING struct timespec64 at \
