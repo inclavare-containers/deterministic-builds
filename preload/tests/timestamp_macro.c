@@ -1,5 +1,3 @@
 #include <stdio.h>
 
-int main() {
-    printf("Timestamp: %s\n", __TIMESTAMP__);
-}
+int main() { printf("Timestamp: %s\n", __TIMESTAMP__); }
