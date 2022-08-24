@@ -99,10 +99,6 @@ int handle_enter_newfstatat(struct trace_event_raw_sys_enter *ctx) {
 */
 SEC("tracepoint/syscalls/sys_exit_newfstatat")
 int handle_exit_newfstatat(struct trace_event_raw_sys_exit *ctx) {
-  struct event *e;
-
-  bool should_modify = true;
-
   char comm[16];
   bpf_get_current_comm(comm, 16);
   if (comm_filter(comm)) {
