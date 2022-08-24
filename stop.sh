@@ -5,7 +5,9 @@ if [[ `whoami` != "root" ]]; then
     exit 1
 fi
 
-BPF_Apps=('modify_time' 'modify_file_timestamp' 'preload_filter')
+set -x
+
+BPF_Apps=('modify_time' 'modify_file_timestamp' 'modify_file_read' 'preload_filter')
 
 for app in "${BPF_Apps[@]}"; do
     echo "Killing $app"
@@ -19,3 +21,9 @@ for app in "${BPF_Apps[@]}"; do
         kill -2 $pid
     done
 done
+
+cd ${PRELOAD_DIR_PATH}
+./unload_modify.sh
+cd ..
+
+set +x
