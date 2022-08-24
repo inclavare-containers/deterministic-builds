@@ -1,14 +1,14 @@
 #!/bin/bash
 
-PRELOAD_DIR_PATH="./preload/"
-PRELOAD_SO_NAME="modify_time.so"
-BPF_DIR_PATH="./bpf/src/"
-BPF_Apps=('modify_time' 'modify_file_timestamp' 'modify_file_read' 'preload_filter')
-
 if [[ `whoami` != "root" ]]; then
     echo "Should run in root"
     exit 1
 fi
+
+PRELOAD_DIR_PATH="./preload/"
+PRELOAD_SO_NAME="modify_time.so"
+BPF_DIR_PATH="./bpf/src/"
+BPF_Apps=('modify_time' 'modify_file_timestamp' 'modify_file_read' 'preload_filter')
 
 set -x
 
