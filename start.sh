@@ -1,26 +1,44 @@
 #!/bin/bash
 
+if [[ `whoami` != "root" ]]; then
+    echo "Should run in root"
+    exit 1
+fi
+
+PRELOAD_DIR_PATH="./preload/"
+PRELOAD_SO_NAME="modify_time.so"
+BPF_DIR_PATH="./bpf/src/"
+BPF_Apps=('modify_time' 'modify_file_timestamp' 'modify_file_read' 'preload_filter')
+
 set -x
 
-cd ./preload
+cd $PRELOAD_DIR_PATH
 make
 cd ..
 
-cd ./bpf/src/
+cd $BPF_DIR_PATH
 make
 cd ../..
 
-if [[ ! (-e ./preload/modify_time.so) ]]; then
-    echo "./preload/modify_time.so not exist, exit"
+if [[ ! (-e "${PRELOAD_DIR_PATH}${PRELOAD_SO_NAME}") ]]; then
+    echo "${PRELOAD_DIR_PATH}${PRELOAD_SO_NAME} not exist, exit"
     exit 1
 fi
 
-if [[ ! (-e ./bpf/src/modifytime) ]]; then
-    echo "./bpf/src/modifytime not exist, exit"
-    exit 1
-fi
+for app in "${BPF_Apps[@]}"; do
+    echo $app
+    if [[ ! (-e "${BPF_DIR_PATH}${app}") ]]; then
+        echo "${BPF_DIR_PATH}${app} not exist, exit"
+        exit 1
+    fi
+done
 
-# export LD_PRELOAD=$PWD/preload/modify_time.so
-./bpf/src/modifytime &
+for app in "${BPF_Apps[@]}"; do
+    ${BPF_DIR_PATH}${app} &
+done
+
+cd ${PRELOAD_DIR_PATH}
+./load_modify.sh
+cd ..
 
 set +x

@@ -1,4 +1,4 @@
-all: macros file files date
+all: macros file files date timestamp
 
 macros: macros.c
 	gcc macros.c -o macros_$(shell date +%Y%m%d%H%M%S).out
@@ -14,5 +14,8 @@ file: file.c
 date: date.c
 	gcc date.c -o date_$(shell date +%Y%m%d%H%M%S).out
 
+timestamp: timestamp.c
+	gcc timestamp.c -o timestamp_$(shell date +%Y%m%d%H%M%S).out
+
 clean:
-	rm -f macros_*.out file_*.out date_*.out
+	rm -f *.out *.i

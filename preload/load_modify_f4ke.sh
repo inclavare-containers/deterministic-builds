@@ -7,7 +7,7 @@ fi
 
 PRELOAD_PATH=/etc/ld.so.preload 
 BACKUP_PATH=/etc/ld.so.preload.backup
-SO_NAME=modify_time.so
+SO_NAME=modify_f4ke.so
 
 
 export LD_PRELOAD=

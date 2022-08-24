@@ -4,10 +4,20 @@ Deterministic Builds uses eBPF to intercept syscalls, to build same binaries fro
 
 ## Table of Contents
 
+- [Method](#method)
 - [Prerequisites](#prerequisites)
 - [Usage](#usage)
+- [Examples](#examples)
 - [Dependencies](#dependencies)
 - [Lisence](#license)
+
+## Method
+
+Intercept syscalls related to time and make their return values fixed. eBPF can only modify syscalls which pass pointers to parameters using [BPF helper](https://man7.org/linux/man-pages/man7/bpf-helpers.7.html) function `bpf_probe_read_user`.
+
+### Time
+
+Three syscalls about time are `gettimeofday`, `clock_gettime` and `time`. eBPF intercepts `gettimeofday` and `clock_gettime`. eBPF can not intercept `time`, so preload library is used to return fixed value, which modifies function `time` in glibc.
 
 ## Prerequisites
 
@@ -19,6 +29,10 @@ apt install clang libelf1 libelf-dev zlib1g-dev build-essential
 ```
 
 ## Usage
+
+### Config
+
+You can specify a timestamp to modify in `./config/time_config.h`.
 
 ### Work with Docker
 
@@ -37,6 +51,23 @@ docker run -it deterministic_builds
 ```shell
 ./stop.sh
 ```
+
+## Examples
+
+### gcc macros
+
+Some macros in gcc can lead to nondeterminacy in compilation.
+
+Including:
+
+- `__DATE__`
+- `__TIME__`
+- `__TIMESTAMP__`
+- `__FILE__`
+
+### Kernel Compilation
+
+There are some timestamps and random fields in binary file `vmlinux`, the compiled result of linux kernel.
 
 ## Dependencies
 
