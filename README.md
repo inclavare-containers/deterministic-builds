@@ -1,6 +1,6 @@
 # Deterministic Builds
 
-Deterministic Builds uses eBPF to intercept syscalls, to build same binaries from same source.
+Deterministic Builds uses eBPF to intercept syscalls, to build same binaries from same source on Linux. You can start eBPF programs and then just run build tasks while this tool is making your build deterministic transparently.
 
 ## Table of Contents
 
@@ -9,7 +9,7 @@ Deterministic Builds uses eBPF to intercept syscalls, to build same binaries fro
 - [Usage](#usage)
 - [Examples](#examples)
 - [Dependencies](#dependencies)
-- [Lisence](#license)
+- [License](#license)
 
 ## Method
 
@@ -17,7 +17,11 @@ Intercept syscalls related to time and make their return values fixed. eBPF can 
 
 ### Time
 
-Three syscalls about time are `gettimeofday`, `clock_gettime` and `time`. eBPF intercepts `gettimeofday` and `clock_gettime`. eBPF can not intercept `time`, so preload library is used to return fixed value, which modifies function `time` in glibc.
+Three syscalls about time are `gettimeofday`, `clock_gettime` and `time`. eBPF intercepts `gettimeofday` and `clock_gettime`. eBPF can not intercept `time`, so preload library is used to return fixed value, which modifies function `time` in glibc. To make the 
+
+### File
+
+A file is usually read by syscalls including `openat`, `newstatat` and `read` or `mmap`. eBPF intercepts these syscalls to modify file name, file timestamps and file contents. 
 
 ## Prerequisites
 
@@ -30,9 +34,9 @@ apt install clang libelf1 libelf-dev zlib1g-dev build-essential
 
 ## Usage
 
-### Config
+### Configuration
 
-You can specify a timestamp to modify in `./config/time_config.h`.
+You can specify the modified timestamp to modify in `./config/time_config.h`.
 
 ### Work with Docker
 

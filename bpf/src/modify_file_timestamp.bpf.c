@@ -3,6 +3,7 @@
 #include <bpf/bpf_tracing.h>
 #include <bpf/bpf_core_read.h>
 #include "modify_file_timestamp.h"
+#include "common.bpf.h"
 #include "../../config/time_config.h"
 
 char LICENSE[] SEC("license") = "Dual BSD/GPL";
@@ -27,13 +28,6 @@ struct {
   __type(key, tid_t);
   __type(value, u64);
 } stat_ps SEC(".maps");
-
-bool comm_filter(char *comm) {
-  if (!(__builtin_memcmp("cc1\0", comm, 4) == 0)) {
-    return 0;
-  }
-  return 1;
-}
 
 SEC("tracepoint/syscalls/sys_enter_newfstatat")
 int handle_enter_newfstatat(struct trace_event_raw_sys_enter *ctx) {
