@@ -15,3 +15,7 @@ For users in China
 ```
 docker build -t test/compile -f Dockerfile.cn .
 ```
+
+## References
+
+[An introduction to deterministic builds with C/C++](https://blog.conan.io/2019/09/02/Deterministic-builds-with-C-C++.html)
