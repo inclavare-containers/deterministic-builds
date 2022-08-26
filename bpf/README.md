@@ -35,6 +35,10 @@ make
 
 `modify_file_name` intercepts `openat` syscall to modify the names of read program files suffixed with ".c", ".cc", ".cpp" or ".cxx" to empty, making `__FILE__` macro return a fixed value.
 
+## `modify_random`
+
+`modify_random` intercepts the reading syscalls of `/dev/random` and `/dev/urandom`, and `getrandom` syscall, making the random generation of names in the compiler (e.g. random names in Link Time Optimization) fixed.
+
 ## `preload_filter`
 
 `preload_filter` intercepts the reading syscalls of `/etc/ld.so.preload` when loading an executable file. The reading syscalls return origin content of `/etc/ld.so.preload` when the specified processes calling them, or they return empty content.
