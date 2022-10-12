@@ -32,32 +32,35 @@ else
 fi
 
 KERNEL_DIR=linux-$KERNEL_VERSION
-KERNEL_SRC_FILE=$KERNEL_DIR.tar.xz
-KERNEL_SIGN_FILE=$KERNEL_DIR.tar.sign
+KERNEL_SRC_TAR_FILE=$KERNEL_DIR.tar
+KERNEL_SRC_XZ_FILE=$KERNEL_SRC_TAR_FILE.xz
+KERNEL_SIGN_FILE=$KERNEL_SRC_TAR_FILE.sign
 
-set -x
+set -eux
 
-apt-get install -y git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison
+apt-get install -y git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison gnupg2
 
 if [ ! -d "$KERNEL_DIR" ]; then
-    echo "Downloading linux kernel $KERNEL_VERSION source from" $KERNEL_URL_PREFIX$KERNEL_SRC_FILE
-    if [ ! -f "$KERNEL_SRC_FILE" ]; then
-        wget $KERNEL_URL_PREFIX$KERNEL_SRC_FILE
+    echo "Downloading linux kernel $KERNEL_VERSION source from" $KERNEL_URL_PREFIX$KERNEL_SRC_XZ_FILE
+    if [ ! -f "$KERNEL_SRC_TAR_FILE" ]; then    
+        if [ ! -f "$KERNEL_SRC_XZ_FILE" ]; then
+            wget -q $KERNEL_URL_PREFIX$KERNEL_SRC_XZ_FILE
+        fi
+        unxz -v $KERNEL_SRC_XZ_FILE
     fi
-    unxz -v $KERNEL_SRC_FILE
 
     if [ ! -f "$KERNEL_SIGN_FILE" ]; then
-        wget $KERNEL_URL_PREFIX$KERNEL_SIGN_FILE
+        wget -q $KERNEL_URL_PREFIX$KERNEL_SIGN_FILE
     fi
     gpg2 --locate-keys torvalds@kernel.org gregkh@kernel.org
     gpg --verify $KERNEL_SIGN_FILE
 
-    tar xvf $KERNEL_DIR.tar
+    tar -xf $KERNEL_SRC_TAR_FILE
 fi
 
-cd linux-$KERNEL_VERSION
+cd $KERNEL_DIR
 
-if [ !(-f ".config") ]; then
+if [ ! -f ".config" ]; then
     make defconfig
 fi
 set +x
