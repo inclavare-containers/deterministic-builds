@@ -2,17 +2,17 @@
 
 echo "Init cases"
 
-set -x
+set -ex
 
 cd cases
 
 ls . | parallel -j $(nproc) \
-"echo 'Initing' {};
-cd {}; \
-if [ -e init.sh ]
-then
-    sh init.sh;
-fi
 "
+if [ -e {}/init.sh ]
+then
+    echo 'Initing' {}; \
+    cd {}; \
+    bash init.sh || { err=$?; echo {} failed; exit $err; }
+fi"
 
 cd ../

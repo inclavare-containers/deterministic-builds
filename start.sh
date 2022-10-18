@@ -8,7 +8,7 @@ fi
 PRELOAD_DIR_PATH="./preload/"
 PRELOAD_SO_NAME="modify_time.so"
 BPF_DIR_PATH="./bpf/src/"
-BPF_Apps=('modify_time' 'modify_file_timestamp' 'modify_file_read' 'preload_filter')
+BPF_Apps=('modify_time' 'modify_file_timestamp' 'modify_file_read' 'preload_filter' 'modify_file_name' 'modify_random')
 
 set -x
 

@@ -142,11 +142,16 @@ int handle_exit_newfstatat(struct trace_event_raw_sys_exit *ctx) {
 
 SEC("tracepoint/syscalls/sys_enter_read")
 int handle_enter_read(struct trace_event_raw_sys_enter *ctx) {
-  tid_t tid = bpf_get_current_pid_tgid();
-
   char comm[16];
   bpf_get_current_comm(comm, 16);
   if (!comm_filter(comm)) {
+    return 0;
+  }
+
+  tid_t tid = bpf_get_current_pid_tgid();
+
+  long unsigned int *blank_p = bpf_map_lookup_elem(&tids, &tid);
+  if (blank_p == NULL) {
     return 0;
   }
 

@@ -25,7 +25,7 @@ A file is usually read by syscalls including `openat`, `newstatat` and `read` or
 
 ## Prerequisites
 
-To compile eBPF programs and preload shared objects, you will need `clang`, `libelf`, `zlib`, `build-essential`.
+The kernel version should be at least 5.8. To compile eBPF programs and preload shared objects, you will need `clang`, `libelf`, `zlib`, `build-essential`.
 
 On Ubuntu:
 ```
@@ -57,6 +57,20 @@ docker run -it deterministic_builds
 ```
 
 ## Examples
+
+Run examples with docker:
+
+```bash
+# build images normally
+docker build -t example .
+# build images use Chinese package manager mirrors
+docker build -t example . -f Dockerfile.cn
+
+# run container
+docker run -it example
+# enter the shell
+docker exec -it <CONTAINER ID> /bin/bash
+```
 
 ### gcc macros
 

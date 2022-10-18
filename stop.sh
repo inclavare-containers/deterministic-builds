@@ -9,7 +9,7 @@ PRELOAD_DIR_PATH="./preload/"
 
 set -x
 
-BPF_Apps=('modify_time' 'modify_file_timestamp' 'modify_file_read' 'preload_filter')
+BPF_Apps=('modify_time' 'modify_file_timestamp' 'modify_file_read' 'preload_filter' 'modify_file_name' 'modify_random')
 
 for app in "${BPF_Apps[@]}"; do
     echo "Killing $app"
